@@ -1,136 +1,213 @@
 # 贡献指南
 
-感谢你考虑为Python项目模板做出贡献！
+👋 欢迎来到项目贡献指南！
 
-## 如何贡献
+## 📝 贡献流程
 
-1. Fork 项目
-2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 开启Pull Request
+1. 🍴 Fork 本仓库
+2. 🌿 创建特性分支
+3. ✍️ 提交更改
+4. 🔄 同步上游更改
+5. 📬 创建 Pull Request
 
-## 开发流程
+## 🎯 贡献类型
 
-### 1. 设置开发环境
+### 💻 代码贡献
 
+#### AI模型开发
+- 优化神经网络架构
+- 改进训练算法
+- 提供新的评估方法
+- 实现新的AI策略
+
+#### 游戏功能
+- 添加新的游戏模式
+- 实现新的界面功能
+- 优化性能
+- 改进用户体验
+
+#### 系统功能
+- 实现新功能
+- 修复bug
+- 优化性能
+- 改进安全性
+
+### 📚 文档贡献
+
+- 完善使用文档
+- 添加示例代码
+- 更新API文档
+- 翻译文档
+
+### ⚡ 性能优化
+
+- 优化代码效率
+- 减少资源消耗
+- 改进响应速度
+- 优化内存使用
+
+### 🎨 界面改进
+
+- 优化用户界面
+- 改进交互体验
+- 添加新的主题
+- 实现响应式设计
+
+## 💡 开发指南
+
+### 🔧 环境设置
+
+1. 克隆仓库：
 ```bash
-# 克隆项目
-git clone <your-fork-url>
+git clone https://github.com/yourusername/python-project-template.git
 cd python-project-template
-
-# 安装依赖
-poetry install
-
-# 安装pre-commit钩子
-poetry run pre-commit install
 ```
 
-### 2. 开发规范
+2. 安装依赖：
+```bash
+poetry install
+```
 
-#### 代码风格
+3. 激活环境：
+```bash
+poetry shell
+```
 
-- 遵循PEP 8规范
-- 使用Black格式化代码
-- 添加类型注解
-- 编写详细的文档字符串
+### 🏗️ 开发流程
 
-#### 提交信息规范
+1. 创建分支：
+```bash
+git checkout -b feature/your-feature
+```
 
-使用约定式提交规范：
+2. 开发功能
 
+3. 运行测试：
+```bash
+poetry run pytest
+```
+
+4. 提交更改：
+```bash
+git add .
+git commit -m "feat: add new feature"
+```
+
+### 📋 提交规范
+
+#### 分支命名
+
+- 功能开发：`feature/功能名称`
+- 问题修复：`fix/问题描述`
+- 文档更新：`docs/更新内容`
+- AI相关：`ai/改进描述`
+
+#### 提交信息
+
+```
+<类型>(<范围>): <描述>
+
+[可选的详细描述]
+
+[可选的脚注]
+```
+
+类型包括：
 - `feat`: 新功能
-- `fix`: 修复bug
+- `fix`: Bug修复
 - `docs`: 文档更新
-- `style`: 代码风格调整
+- `style`: 代码格式
 - `refactor`: 代码重构
+- `perf`: 性能优化
 - `test`: 测试相关
-- `chore`: 构建过程或辅助工具的变动
+- `build`: 构建相关
+- `ci`: CI配置
+- `chore`: 其他更改
+- `ai`: AI模型相关
 
 示例：
 ```
-feat(core): 添加异步任务支持
-fix(db): 修复连接池泄露问题
-docs(api): 更新API文档
+feat(ai): 添加新的神经网络层
+
+- 实现注意力机制
+- 添加残差连接
+- 优化激活函数
+
+Closes #123
 ```
 
-### 3. 测试
+### 🔍 代码审查
 
-- 为新功能添加测试
-- 确保所有测试通过
-- 保持测试覆盖率
+提交PR前请确保：
 
+1. ✅ 所有测试通过
+2. 📝 更新相关文档
+3. 🎯 代码符合规范
+4. 🔍 无安全问题
+5. 📊 性能达标
+
+## 🎮 游戏开发指南
+
+### AI模型开发
+
+1. 模型架构
+```python
+class GomokuAI(nn.Module):
+    def __init__(self):
+        super().__init__()
+        # 实现模型结构
+```
+
+2. 训练流程
+```python
+def train_model(model, data):
+    # 实现训练逻辑
+```
+
+### 游戏功能开发
+
+1. 添加新模式
+```python
+@app.get("/game/{mode}")
+async def start_game(mode: str):
+    # 实现游戏模式
+```
+
+2. 实现新功能
+```python
+class GameFeature:
+    def __init__(self):
+        # 实现功能逻辑
+```
+
+## ❓ 常见问题
+
+### Q: 如何运行测试？
 ```bash
-# 运行测试
 poetry run pytest
-
-# 检查覆盖率
-poetry run pytest --cov=src
 ```
 
-### 4. 文档
-
-- 更新相关文档
-- 添加新功能的使用示例
-- 确保文档构建成功
-
+### Q: 如何生成文档？
 ```bash
-# 构建文档
-cd docs/zh && poetry run make html
-cd docs/en && poetry run make html
+poetry run sphinx-build -b html docs/source docs/build
 ```
 
-## 提交问题和拉取请求
+### Q: 如何提交PR？
+1. Fork仓库
+2. 创建分支
+3. 提交更改
+4. 创建PR
 
-### 提交问题
+## 📞 联系方式
 
-1. 在GitHub上查看现有问题，确保您的问题尚未被报告。
-2. 如果没有，点击“New Issue”按钮，填写问题描述。
+- 📧 Email: your.email@example.com
+- 💬 Discord: [加入我们](https://discord.gg/your-server)
+- 📢 Issues: [提交问题](https://github.com/yourusername/python-project-template/issues)
 
-### 提交拉取请求
+## 📜 行为准则
 
-1. Fork此仓库。
-2. 创建一个新的分支：`git checkout -b my-feature-branch`
-3. 在新分支上进行您的更改。
-4. 提交更改：`git commit -m 'Add some feature'`
-5. 推送到您的分支：`git push origin my-feature-branch`
-6. 在GitHub上创建拉取请求。
+请参阅 [行为准则](CODE_OF_CONDUCT.md)。
 
-## Pull Request 检查清单
+---
 
-提交PR前，请确保：
-
-- [ ] 代码已格式化
-- [ ] 添加了测试
-- [ ] 所有测试通过
-- [ ] 更新了文档
-- [ ] 遵循提交信息规范
-- [ ] 更新了CHANGELOG（如果适用）
-
-## 功能建议
-
-提出新功能建议时，请说明：
-
-- 功能描述
-- 使用场景
-- 实现建议（可选）
-
-## 行为准则
-
-请保持专业和友善。我们欢迎所有建设性的贡献！
-
-## 如何贡献
-
-感谢您对本项目的兴趣！以下是如何贡献的步骤：
-
-### 提交问题
-1. 在GitHub上查看现有问题，确保您的问题尚未被报告。
-2. 如果没有，点击“New Issue”按钮，填写问题描述。
-
-### 提交拉取请求
-1. Fork此仓库。
-2. 创建一个新的分支：`git checkout -b my-feature-branch`
-3. 在新分支上进行您的更改。
-4. 提交更改：`git commit -m 'Add some feature'`
-5. 推送到您的分支：`git push origin my-feature-branch`
-6. 在GitHub上创建拉取请求。
+感谢您的贡献！🎉
