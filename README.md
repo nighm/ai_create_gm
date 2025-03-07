@@ -272,3 +272,156 @@ cd docs/zh && poetry run make html
 ## 🌟 致谢
 
 感谢所有为这个项目做出贡献的开发者！
+
+# AI五子棋游戏
+
+这是一个基于深度强化学习的五子棋AI游戏项目。游戏支持人机对战和AI自我对战模式，AI模型具有自学习能力，可以通过对战不断提升棋力。
+
+## 功能特点
+
+- 人机对战：玩家可以与AI进行对战
+- AI对战：两个AI模型可以进行自动对战，并通过对战结果进行学习
+- 实时学习：AI模型会在每局游戏结束后更新参数，不断提升棋力
+- 模型持久化：训练后的模型会自动保存，下次启动时可以继续使用
+- 美观的界面：使用HTML5 Canvas绘制棋盘，支持响应式设计
+
+## 技术栈
+
+- 后端：Python, FastAPI, WebSocket
+- AI：PyTorch, NumPy
+- 前端：HTML5, JavaScript, Canvas
+
+## 安装和运行
+
+1. 创建并激活虚拟环境：
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+# 或
+.venv\Scripts\activate  # Windows
+```
+
+2. 安装依赖：
+
+```bash
+pip install poetry
+poetry install
+```
+
+3. 运行游戏：
+
+```bash
+python src/main.py
+```
+
+4. 打开浏览器访问：
+
+```
+http://127.0.0.1:8000
+```
+
+## 游戏说明
+
+1. 点击"人机对战"按钮开始与AI对战，玩家执黑先手
+2. 点击"AI对战"按钮观看两个AI进行对战并学习
+3. 点击"重新开始"按钮可以随时重置游戏
+4. 游戏结束后会显示胜负结果
+
+## AI模型说明
+
+- 使用深度卷积神经网络作为策略网络和价值网络
+- 采用深度强化学习方法进行训练
+- 使用经验回放提高训练效率
+- 具有探索与利用的平衡机制
+
+## 项目结构
+
+```
+src/
+  ├── gomoku/
+  │   ├── __init__.py
+  │   ├── game.py          # 游戏核心逻辑
+  │   ├── ai_model.py      # AI模型实现
+  │   ├── server.py        # Web服务器和API
+  │   └── static/          # 静态文件
+  │       └── index.html   # 游戏界面
+  └── main.py              # 程序入口
+```
+
+## 开发计划
+
+- [ ] 添加更多的AI算法实现
+- [ ] 支持调整AI难度
+- [ ] 添加游戏记录回放功能
+- [ ] 支持多人在线对战
+- [ ] 优化AI训练效率
+
+## 贡献指南
+
+欢迎提交Issue和Pull Request！
+
+## 许可证
+
+MIT License
+
+# Gomoku AI
+
+这是一个基于深度强化学习的五子棋AI项目。AI通过自我对弈不断学习和提升，能够在网页界面上与人类玩家进行对战。
+
+## 功能特点
+
+- 基于深度强化学习的AI模型
+- 实时网页对战界面
+- 支持人机对战和AI自我对弈
+- AI持续学习并保存模型
+
+## 快速开始
+
+1. 克隆仓库：
+```bash
+git clone https://github.com/[your-username]/ai_create_gm.git
+cd ai_create_gm
+```
+
+2. 安装依赖：
+```bash
+python -m venv .venv
+.venv\Scripts\activate  # Windows
+pip install -e .
+```
+
+3. 运行游戏：
+```bash
+python run.py
+```
+
+4. 在浏览器中打开：
+```
+http://localhost:8000
+```
+
+## 项目结构
+
+```
+ai_create_gm/
+├── src/
+│   ├── gomoku/
+│   │   ├── ai_model.py    # AI模型实现
+│   │   ├── game.py        # 游戏核心逻辑
+│   │   └── server.py      # Web服务器
+│   └── main.py            # 主程序入口
+├── tests/                 # 测试文件
+└── run.py                 # 运行脚本
+```
+
+## 开发
+
+运行测试：
+```bash
+python -m pytest tests/
+```
+
+## 许可证
+
+MIT License

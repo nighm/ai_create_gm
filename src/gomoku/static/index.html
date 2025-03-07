@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI五子棋</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #game-board {
+            border: 2px solid #333;
+            margin: 20px 0;
+        }
+
+        .status {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI五子棋</h1>
+        <div class="controls">
+            <button id="start-human-ai">人机对战</button>
+            <button id="start-ai-ai">AI对战</button>
+            <button id="reset">重新开始</button>
+        </div>
+        <canvas id="game-board" width="600" height="600"></canvas>
+        <div class="status" id="status">等待开始游戏...</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('game-board');
+        const ctx = canvas.getContext('2d');
+        const boardSize = 15;
+        const cellSize = canvas.width / boardSize;
+        let currentGame = null;
+        let ws = null;
+        const clientId = Date.now().toString();
+
+        function drawBoard() {
+            ctx.fillStyle = '#f2b06d';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            
+            // 绘制棋盘线
+            for (let i = 0; i < boardSize; i++) {
+                // 横线
+                ctx.beginPath();
+                ctx.moveTo(cellSize/2, cellSize/2 + i * cellSize);
+                ctx.lineTo(canvas.width - cellSize/2, cellSize/2 + i * cellSize);
+                ctx.stroke();
+                
+                // 竖线
+                ctx.beginPath();
+                ctx.moveTo(cellSize/2 + i * cellSize, cellSize/2);
+                ctx.lineTo(cellSize/2 + i * cellSize, canvas.height - cellSize/2);
+                ctx.stroke();
+            }
+            
+            // 绘制天元和星位
+            const stars = [
+                [3, 3], [3, 11],
+                [7, 7],
+                [11, 3], [11, 11]
+            ];
+            
+            ctx.fillStyle = '#333';
+            for (const [x, y] of stars) {
+                ctx.beginPath();
+                ctx.arc(
+                    cellSize/2 + x * cellSize,
+                    cellSize/2 + y * cellSize,
+                    4, 0, Math.PI * 2
+                );
+                ctx.fill();
+            }
+        }
+
+        function drawPiece(row, col, player) {
+            const x = cellSize/2 + col * cellSize;
+            const y = cellSize/2 + row * cellSize;
+            const radius = cellSize * 0.4;
+            
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            
+            // 创建渐变
+            const gradient = ctx.createRadialGradient(
+                x - radius/3, y - radius/3, radius/10,
+                x, y, radius
+            );
+            
+            if (player === 1) {
+                gradient.addColorStop(0, '#666');
+                gradient.addColorStop(1, '#000');
+            } else {
+                gradient.addColorStop(0, '#fff');
+                gradient.addColorStop(1, '#ccc');
+            }
+            
+            ctx.fillStyle = gradient;
+            ctx.fill();
+        }
+
+        function updateBoard(gameState) {
+            drawBoard();
+            const board = gameState.board;
+            
+            for (let i = 0; i < boardSize; i++) {
+                for (let j = 0; j < boardSize; j++) {
+                    if (board[i][j] !== 0) {
+                        drawPiece(i, j, board[i][j]);
+                    }
+                }
+            }
+            
+            // 更新状态显示
+            const status = document.getElementById('status');
+            if (gameState.game_over) {
+                if (gameState.winner === 0) {
+                    status.textContent = '游戏结束：平局！';
+                } else {
+                    status.textContent = `游戏结束：${gameState.winner === 1 ? '黑' : '白'}子胜！`;
+                }
+            } else {
+                status.textContent = `当前回合：${gameState.current_player === 1 ? '黑' : '白'}子`;
+            }
+        }
+
+        function connectWebSocket() {
+            ws = new WebSocket(`ws://${window.location.host}/ws/${clientId}`);
+            
+            ws.onmessage = function(event) {
+                const message = JSON.parse(event.data);
+                if (message.type === 'game_state') {
+                    currentGame = message.state;
+                    updateBoard(currentGame);
+                }
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket错误:', error);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket连接已关闭');
+            };
+        }
+
+        function startGame(mode) {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'start_game',
+                    mode: mode
+                }));
+            }
+        }
+
+        canvas.addEventListener('click', function(event) {
+            if (!currentGame || currentGame.game_over) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            
+            const col = Math.floor((x - cellSize/4) / cellSize);
+            const row = Math.floor((y - cellSize/4) / cellSize);
+            
+            if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
+                ws.send(JSON.stringify({
+                    type: 'move',
+                    row: row,
+                    col: col
+                }));
+            }
+        });
+
+        document.getElementById('start-human-ai').addEventListener('click', function() {
+            startGame('human_vs_ai');
+        });
+
+        document.getElementById('start-ai-ai').addEventListener('click', function() {
+            startGame('ai_vs_ai');
+        });
+
+        document.getElementById('reset').addEventListener('click', function() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'reset'
+                }));
+            }
+        });
+
+        // 初始化
+        drawBoard();
+        connectWebSocket();
+    </script>
+</body>
+</html> 

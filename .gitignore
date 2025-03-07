@@ -67,3 +67,4 @@ build/
 resources/sensitive/
 *.bak
 *.tmp
+src/gomoku/static/ai_model.pth
